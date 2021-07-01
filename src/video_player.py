@@ -43,7 +43,7 @@ class VideoPlayer:
         """
         video = self._video_library.get_video(video_id)
         if video != None:
-            if(self.current_video != None):
+            if(self.current_video != None and self.current_video != video):
                 previous_video = self.current_video
                 print("Playing video: " f"{previous_video._title}")
                 print("Stopping video: " f"{previous_video._title}")
@@ -54,7 +54,7 @@ class VideoPlayer:
                 self.current_video = video
                 self.current_video_state = "playing"
                 print("Playing video: " f"{video._title}")
-        elif(self.current_video != None):
+        elif(video == None and self.current_video != None):
             print("Playing video: " f"{self.current_video._title}")
             print("Cannot play video: Video does not exist")
         else:
@@ -79,8 +79,17 @@ class VideoPlayer:
         random_index = random.randrange(len(videos))
         random_video = videos[random_index]
         video = self._video_library.get_video(random_video.video_id)
-        print("Playing video: " f"{video._title}")
-
+        if(self.current_video != None):
+            previous_video = self.current_video
+            print("Playing video: " f"{previous_video._title}")
+            print("Stopping video: " f"{previous_video._title}")
+            print("Playing video: " f"{video._title}")
+            self.current_video = video
+            self.current_video_state = "playing"
+        else:
+            print("Playing video: " f"{video._title}")
+            self.current_video = video
+            self.current_video_state = "playing"
     def pause_video(self):
         """Pauses the current video."""
         if self.current_video != None:
